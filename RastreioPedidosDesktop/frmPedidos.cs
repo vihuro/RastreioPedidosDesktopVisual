@@ -1,4 +1,5 @@
-﻿using RastreioPedidosDesktop.DAL;
+﻿using MySql.Data.MySqlClient;
+using RastreioPedidosDesktop.DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,43 +14,42 @@ namespace RastreioPedidosDesktop
 {
     public partial class frmPedidos : Form
     {
-        public bool tem = false;
-        public String mensagem = "";
-        Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand();
         Conexao con = new Conexao();
-        Npgsql.NpgsqlDataReader dr;
+        Npgsql.NpgsqlCommand postgreSql = new Npgsql.NpgsqlCommand();
+        Npgsql.NpgsqlDataReader lerDados;
 
-        DataSet dataSet;
-        String pedidos;
-        String id;
-        String status;
-        
-        
+
 
 
         public frmPedidos()
         {
             InitializeComponent();
-            cmd.CommandText = "select * from tab_Pedidos";
+
+            postgreSql.CommandText = "select * from tab_Pedidos";
+
+            con.conectar();
+            postgreSql.Connection = con.conectar();
+
+            lerDados = postgreSql.ExecuteReader();
+
 
             try
             {
-                cmd.Connection = con.conectar();
-                dr = cmd.ExecuteReader();
 
+                while(lerDados.Read())
+                    {
+   
+                        ListViewItem list = new ListViewItem(); ;
+
+                        list.SubItems[0].Text = lerDados[0].ToString();
+                        list.SubItems.Add(lerDados[9].ToString());
+                        list.SubItems.Add(lerDados[1].ToString());
                     
-                    ListViewItem list = new ListViewItem("i");
 
 
+                       listView1.Items.Add(list);
 
-                list.SubItems.Add(dr.10);
-                list.SubItems.Add("2");
-
-
-               listView1.Items.Add(list);
-
-
-                
+                    }
 
             }
             catch(Npgsql.NpgsqlException)
@@ -70,6 +70,23 @@ namespace RastreioPedidosDesktop
         private void frmPedidos_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void alteraSenhaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ajudaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmSobre sobre = new frmSobre();
+            sobre.Show();
+        }
+
+        private void desenvolvimentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmSobre sobre = new frmSobre();
+            sobre.Show();
         }
     }
 }

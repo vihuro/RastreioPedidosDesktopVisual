@@ -27,5 +27,11 @@ namespace RastreioPedidosDesktop
         {
 
         }
+
+        private void desenvolvimentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmSobre sobre = new frmSobre();
+            sobre.Show();
+        }
     }
 }
