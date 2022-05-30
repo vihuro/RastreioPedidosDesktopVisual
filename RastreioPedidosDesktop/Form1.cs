@@ -25,8 +25,11 @@ namespace RastreioPedidosDesktop
             
                 if (controle.tem)
                 {
-                    MessageBox.Show("Login realizado");
+                 
                     frmMenu menu = new frmMenu();
+
+                    menu.lblUsuario.Text = txtUsuario.Text.ToString();
+                    
                     menu.Show();
 
                 }

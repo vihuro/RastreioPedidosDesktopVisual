@@ -20,6 +20,8 @@ namespace RastreioPedidosDesktop
         private void buscarPedidosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmPedidos pedidos = new frmPedidos();
+            pedidos.lblUsuario.Text = lblUsuario.Text.ToString();
+
             pedidos.Show();
         }
 
@@ -32,6 +34,11 @@ namespace RastreioPedidosDesktop
         {
             frmSobre sobre = new frmSobre();
             sobre.Show();
+        }
+
+        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }

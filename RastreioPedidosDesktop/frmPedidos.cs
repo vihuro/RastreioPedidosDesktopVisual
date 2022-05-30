@@ -19,12 +19,8 @@ namespace RastreioPedidosDesktop
         Npgsql.NpgsqlDataReader lerDados;
 
 
-
-
-        public frmPedidos()
+        public void loadListView()
         {
-            InitializeComponent();
-
             postgreSql.CommandText = "select * from tab_Pedidos order by numero_Pedido asc";
 
             con.conectar();
@@ -36,35 +32,39 @@ namespace RastreioPedidosDesktop
             try
             {
 
-                while(lerDados.Read())
-                    {
-   
-                        ListViewItem list = new ListViewItem(lerDados[0].ToString());
+                while (lerDados.Read())
+                {
 
-                    String Date = DateTime.Now.ToString("dd-MM-");
+                    ListViewItem list = new ListViewItem(lerDados[0].ToString());
 
                     list.SubItems.Add(lerDados[9].ToString());
-                        list.SubItems.Add(lerDados[1].ToString());
-                    
+                    list.SubItems.Add(lerDados[1].ToString());
 
 
-                       listView1.Items.Add(list);
+                    listView1.Items.Add(list);
 
-                    }
+                }
 
                 con.desconectar();
                 postgreSql.Connection.Close();
 
 
             }
-            catch(Npgsql.NpgsqlException)
+            catch (Npgsql.NpgsqlException)
             {
-                
-            }
 
+            }
         }
 
-        public static object ListView1 { get; internal set; }
+
+        public frmPedidos()
+        {
+            InitializeComponent();
+
+            loadListView();
+
+
+        }
 
         public Npgsql.NpgsqlDataReader GetLerDados()
         {
@@ -73,13 +73,6 @@ namespace RastreioPedidosDesktop
 
         private void obterDados(object sender, EventArgs e)
         {
-
-        }
-
-        public void listView1_SelectedIndexChanged(object sender, EventArgs e, Npgsql.NpgsqlDataReader lerDados)
-        {
-
-            MessageBox.Show(listView1.SelectedIndices[0].ToString());
 
         }
 
@@ -106,36 +99,137 @@ namespace RastreioPedidosDesktop
             sobre.Show();
         }
 
+        private void obter()
+        {
+
+
+        }
+
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(listView1.SelectedIndices.Count > 0)
+
+
+        }
+
+        private void dtpDataEntrega_ValueChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            txtPedido.Text = listView1.SelectedItems[0].SubItems[1].Text;
+
+
+            if (listView1.SelectedIndices.Count > 0)
             {
-                MessageBox.Show(listView1.SelectedItems[0].SubItems[1].Text);
-                txtPedido.Text = listView1.SelectedItems[0].SubItems[1].Text;
 
                 postgreSql.CommandText = "select * from tab_Pedidos where numero_Pedido = @Pedido";
-                postgreSql.Parameters.AddWithValue("Pedido", listView1.SelectedItems[0].SubItems[1].Text);
-
-            
+                postgreSql.Parameters.AddWithValue("@Pedido", txtPedido.Text);
 
                 con.conectar();
                 postgreSql.Connection = con.conectar();
-
                 lerDados = postgreSql.ExecuteReader();
 
-                MessageBox.Show(lerDados[0].ToString());
+                    while (lerDados.Read())
+                    {
+                    if (lerDados["numero_Pedido"].ToString() != txtPedido.Text)
+                    {
+                        con.desconectar();
+                        postgreSql.Connection.Close();
 
-                if (lerDados.NextResult())
-                {
+                        postgreSql.CommandText = "select * from tab_Pedidos where numero_Pedido = @Pedido";
+                        postgreSql.Parameters.Clear();
+                        postgreSql.Parameters.AddWithValue("@Pedido", txtPedido.Text);
 
-                    cboStatus = (ComboBox)lerDados[0];
 
-                }
+                        con.conectar();
+                        postgreSql.Connection = con.conectar();
+                        lerDados = postgreSql.ExecuteReader();
 
+
+                    }
+                    else
+                    {
+                        if (lerDados["data_entrega"] != DBNull.Value)
+                        {
+                            String dataEntrega = Convert.ToDateTime(lerDados["data_Entrega"]).ToString("dd/MM/yyyy");
+
+                            dtpDataEntrega.Value = Convert.ToDateTime(dataEntrega);
+                        }
+                        else
+                        {
+                            dtpDataEntrega.Value = Convert.ToDateTime("01/01/1991");
+
+
+                        }
+
+                        txtPedido.Text = lerDados["numero_Pedido"].ToString();
+
+                        ListViewItem list = new ListViewItem();
+
+                        if (lerDados["data_ini_prod"] != DBNull.Value)
+                        { 
+
+                            String dataIniProd = Convert.ToDateTime(lerDados["data_ini_Prod"]).ToString("dd/MM/yyyy  hh:mm:ss");
+
+                            dtpDataEntrega.Value = Convert.ToDateTime(dataIniProd);
+
+
+                            ListViewItem listItem = new ListViewItem();
+
+                            listItem.SubItems.Add(dataIniProd);
+
+
+                            listViewApontamento.Items[1].SubItems.Add(dataIniProd);
+
+                        }
+                        else
+                        {
+                            ListViewItem listItem = new ListViewItem();
+
+                            String dataValue = "00/00/0000 00:00:00";
+
+                            listItem.SubItems.Add("00/00/0000 00:00:00");
+
+
+                            listViewApontamento.Items[1].SubItems.Add(dataValue);
+
+                            date();
+
+
+
+                        }
+                    }
+
+                    }
                 con.desconectar();
+                postgreSql.Connection.Close();
 
             }
+        }
+
+        private void date()
+        {
+            dtpDataEntrega.Value = Convert.ToDateTime("01/01/1991");
+        }
+
+        private void btnApontar_Click(object sender, EventArgs e)
+        {
+ 
+
+            String dateTime = Convert.ToDateTime(DateTime.Now).ToString("dd/MM/yyyy HH:mm:ss");
+
+            listViewApontamento.SelectedItems[0].SubItems.Add(dateTime);
+            listViewApontamento.SelectedItems[0].SubItems.Add(lblUsuario.Text);
+
 
         }
+
+        private void btnAlterar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }
