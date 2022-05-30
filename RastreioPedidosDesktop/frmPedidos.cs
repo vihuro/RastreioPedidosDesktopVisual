@@ -25,7 +25,7 @@ namespace RastreioPedidosDesktop
         {
             InitializeComponent();
 
-            postgreSql.CommandText = "select * from tab_Pedidos";
+            postgreSql.CommandText = "select * from tab_Pedidos order by numero_Pedido asc";
 
             con.conectar();
             postgreSql.Connection = con.conectar();
@@ -39,10 +39,11 @@ namespace RastreioPedidosDesktop
                 while(lerDados.Read())
                     {
    
-                        ListViewItem list = new ListViewItem(); ;
+                        ListViewItem list = new ListViewItem(lerDados[0].ToString());
 
-                        list.SubItems[0].Text = lerDados[0].ToString();
-                        list.SubItems.Add(lerDados[9].ToString());
+                    String Date = DateTime.Now.ToString("dd-MM-");
+
+                    list.SubItems.Add(lerDados[9].ToString());
                         list.SubItems.Add(lerDados[1].ToString());
                     
 
@@ -50,6 +51,10 @@ namespace RastreioPedidosDesktop
                        listView1.Items.Add(list);
 
                     }
+
+                con.desconectar();
+                postgreSql.Connection.Close();
+
 
             }
             catch(Npgsql.NpgsqlException)
@@ -59,34 +64,78 @@ namespace RastreioPedidosDesktop
 
         }
 
-        String carregar;
+        public static object ListView1 { get; internal set; }
+
+        public Npgsql.NpgsqlDataReader GetLerDados()
+        {
+            return lerDados;
+        }
+
+        private void obterDados(object sender, EventArgs e)
+        {
+
+        }
+
+        public void listView1_SelectedIndexChanged(object sender, EventArgs e, Npgsql.NpgsqlDataReader lerDados)
+        {
+
+            MessageBox.Show(listView1.SelectedIndices[0].ToString());
+
+        }
+
+
+        public void frmPedidos_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public void alteraSenhaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void ajudaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmSobre sobre = new frmSobre();
+            sobre.Show();
+        }
+
+        public void desenvolvimentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmSobre sobre = new frmSobre();
+            sobre.Show();
+        }
+
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
- 
+            if(listView1.SelectedIndices.Count > 0)
+            {
+                MessageBox.Show(listView1.SelectedItems[0].SubItems[1].Text);
+                txtPedido.Text = listView1.SelectedItems[0].SubItems[1].Text;
+
+                postgreSql.CommandText = "select * from tab_Pedidos where numero_Pedido = @Pedido";
+                postgreSql.Parameters.AddWithValue("Pedido", listView1.SelectedItems[0].SubItems[1].Text);
 
             
-        }
 
-        private void frmPedidos_Load(object sender, EventArgs e)
-        {
+                con.conectar();
+                postgreSql.Connection = con.conectar();
 
-        }
+                lerDados = postgreSql.ExecuteReader();
 
-        private void alteraSenhaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+                MessageBox.Show(lerDados[0].ToString());
 
-        }
+                if (lerDados.NextResult())
+                {
 
-        private void ajudaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmSobre sobre = new frmSobre();
-            sobre.Show();
-        }
+                    cboStatus = (ComboBox)lerDados[0];
 
-        private void desenvolvimentoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmSobre sobre = new frmSobre();
-            sobre.Show();
+                }
+
+                con.desconectar();
+
+            }
+
         }
     }
 }
