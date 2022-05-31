@@ -29,11 +29,29 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Data/Hora Geração"}, -1, System.Drawing.Color.Empty, System.Drawing.SystemColors.InactiveBorder, null);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Data/Hora Ini. Prod.");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Data/Hora Fin. Prod.");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Data/Hora Separação");
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Data/Hora Transito");
+            "Data/Hora Geração",
+            "00/00/0000 00:00:00",
+            ""}, -1, System.Drawing.Color.Empty, System.Drawing.SystemColors.InactiveBorder, null);
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Data/Hora Ini. Prod.",
+            "00/00/0000 00:00:00",
+            ""}, -1);
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Data/Hora Fin. Prod.",
+            "00/00/0000 00:00:00",
+            ""}, -1);
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Data/Hora Separação",
+            "00/00/0000 00:00:00",
+            ""}, -1);
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Data/Hora Transito",
+            "00/00/0000 00:00:00",
+            ""}, -1);
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Data/Hora Entrega",
+            "00/00/0000 00:00:00",
+            ""}, -1);
             this.listView1 = new System.Windows.Forms.ListView();
             this.clId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clNumeroPedido = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -263,7 +281,8 @@
             listViewItem2,
             listViewItem3,
             listViewItem4,
-            listViewItem5});
+            listViewItem5,
+            listViewItem6});
             this.listViewApontamento.Location = new System.Drawing.Point(25, 368);
             this.listViewApontamento.Name = "listViewApontamento";
             this.listViewApontamento.Size = new System.Drawing.Size(877, 178);
@@ -373,7 +392,7 @@
         private System.Windows.Forms.Button btnAlterar;
         private System.Windows.Forms.Button btnLimpar;
         private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.ListView listViewApontamento;
+        public System.Windows.Forms.ListView listViewApontamento;
         private System.Windows.Forms.ColumnHeader clSituacao;
         private System.Windows.Forms.ColumnHeader clDataHotaApont;
         private System.Windows.Forms.ColumnHeader clUsuario;
