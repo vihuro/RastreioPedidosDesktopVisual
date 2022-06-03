@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using RastreioPedidosDesktop.DAL;
+using RastreioPedidosDesktop.Modelo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,11 +36,15 @@ namespace RastreioPedidosDesktop
                 while (lerDados.Read())
                 {
 
-                    ListViewItem list = new ListViewItem(lerDados[0].ToString());
+                    String dataGeracao = Convert.ToDateTime(lerDados["data_geracao"]).ToString("dd/MM/yyyy  hh:mm:ss");
 
-                    list.SubItems.Add(lerDados[9].ToString());
-                    list.SubItems.Add(lerDados[1].ToString());
+                    dtpDataEntrega.Value = Convert.ToDateTime(dataGeracao);
 
+                    ListViewItem list = new ListViewItem(lerDados["numero_Pedido"].ToString());
+
+                    list.SubItems.Add(lerDados["status"].ToString());
+                    list.SubItems.Add(dataGeracao);
+                    list.SubItems.Add(lerDados["data_geracao_usuario"].ToString());
 
                     listView1.Items.Add(list);
 
@@ -54,6 +59,8 @@ namespace RastreioPedidosDesktop
             {
 
             }
+            con.desconectar();
+            postgreSql.Connection.Close();
         }
 
 
@@ -117,7 +124,7 @@ namespace RastreioPedidosDesktop
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
         {
-            txtPedido.Text = listView1.SelectedItems[0].SubItems[1].Text;
+            txtPedido.Text = listView1.SelectedItems[0].SubItems[0].Text;
             
             listViewApontamento.Items[0].SubItems[2].Text = string.Empty.ToString();
             listViewApontamento.Items[1].SubItems[2].Text = string.Empty.ToString();
@@ -159,15 +166,19 @@ namespace RastreioPedidosDesktop
                     {
                         if (lerDados["data_prevista_entrega"] != DBNull.Value)
                         {
-                            listViewApontamento.Items[0].SubItems.Clear();
+                            MessageBox.Show("valor data final produção "+lerDados["data_fin_prod"].ToString());
 
                             String dataEntrega = Convert.ToDateTime(lerDados["data_prevista_entrega"]).ToString("dd/MM/yyyy");
 
-                            dtpDataEntrega.Value = Convert.ToDateTime(dataEntrega);
+                            MessageBox.Show(dataEntrega);
+                            dtpDataEntrega.CustomFormat = dataEntrega;
+
+
                         }
                         else
                         {
-                            dtpDataEntrega.Value = Convert.ToDateTime("01/01/1991");
+
+                            dtpDataEntrega.CustomFormat = "00/00/0000";
 
 
                         }
@@ -175,7 +186,7 @@ namespace RastreioPedidosDesktop
                         cboStatus.Text = lerDados["status"].ToString();
                         txtPedido.Text = lerDados["numero_Pedido"].ToString();
 
-
+                        
 
                         if (lerDados["data_geracao"] != DBNull.Value)
                         {
@@ -189,8 +200,8 @@ namespace RastreioPedidosDesktop
 
                             listItem.SubItems.Add(dataGeracao);
 
-
                             listViewApontamento.Items[0].SubItems[1].Text = dataGeracao.ToString();
+
 
                         }
                         else
@@ -205,8 +216,16 @@ namespace RastreioPedidosDesktop
                             listViewApontamento.Items[0].SubItems[1].Text = dataValue.ToString();
 
                         }
+                        if (lerDados["data_geracao_usuario"] != DBNull.Value)
+                        {
+                            listViewApontamento.Items[0].SubItems[2].Text = lerDados["data_geracao_usuario"].ToString();
+                        }
+                        else
+                        {
+                            listViewApontamento.Items[0].SubItems[2].Text = string.Empty;
+                        }
 
-                        if (lerDados["data_ini_prod"] != DBNull.Value)
+                        if (Convert.ToDateTime(lerDados["data_ini_Prod"].ToString()) == DateTime.MinValue)
                         { 
 
                             String dataIniProd = Convert.ToDateTime(lerDados["data_ini_Prod"]).ToString("dd/MM/yyyy  hh:mm:ss");
@@ -233,6 +252,14 @@ namespace RastreioPedidosDesktop
 
                             listViewApontamento.Items[1].SubItems[1].Text = dataValue.ToString();
 
+                        }
+                        if (lerDados["data_ini_prod_usuario"] != DBNull.Value)
+                        {
+                            listViewApontamento.Items[1].SubItems[2].Text = lerDados["data_ini_prod_usuario"].ToString();
+                        }
+                        else
+                        {
+                            listViewApontamento.Items[1].SubItems[2].Text = string.Empty;
                         }
 
                         if (lerDados["data_fin_prod"] != DBNull.Value)
@@ -263,6 +290,14 @@ namespace RastreioPedidosDesktop
                             listViewApontamento.Items[2].SubItems[1].Text = dataValue.ToString();
 
                         }
+                        if (lerDados["data_fin_prod_usuario"] != DBNull.Value)
+                        {
+                            listViewApontamento.Items[2].SubItems[2].Text = lerDados["data_fin_prod_usuario"].ToString();
+                        }
+                        else
+                        {
+                            listViewApontamento.Items[2].SubItems[2].Text = string.Empty;
+                        }
                         if (lerDados["data_separa"] != DBNull.Value)
                         {
 
@@ -290,6 +325,14 @@ namespace RastreioPedidosDesktop
 
                             listViewApontamento.Items[3].SubItems[1].Text = dataValue.ToString();
 
+                        }
+                        if (lerDados["data_transito_usuario"] != DBNull.Value)
+                        {
+                            listViewApontamento.Items[3].SubItems[2].Text = lerDados["data_transito_usuario"].ToString();
+                        }
+                        else
+                        {
+                            listViewApontamento.Items[3].SubItems[2].Text = string.Empty;
                         }
                         if (lerDados["data_transito"] != DBNull.Value)
                         {
@@ -319,6 +362,14 @@ namespace RastreioPedidosDesktop
                             listViewApontamento.Items[4].SubItems[1].Text = dataValue.ToString();
 
                         }
+                        if (lerDados["data_transito_usuario"] != DBNull.Value)
+                        {
+                            listViewApontamento.Items[4].SubItems[2].Text = lerDados["data_transito_usuario"].ToString();
+                        }
+                        else
+                        {
+                            listViewApontamento.Items[4].SubItems[2].Text = string.Empty;
+                        }
                         if (lerDados["data_entrega"] != DBNull.Value)
                         {
 
@@ -347,6 +398,14 @@ namespace RastreioPedidosDesktop
                             listViewApontamento.Items[5].SubItems[1].Text = dataValue.ToString();
 
                         }
+                        if (lerDados["data_entrega_usuario"] != DBNull.Value)
+                        {
+                            listViewApontamento.Items[5].SubItems[2].Text = lerDados["data_entrega_usuario"].ToString();
+                        }
+                        else
+                        {
+                            listViewApontamento.Items[5].SubItems[2].Text = string.Empty;
+                        }
 
                     }
 
@@ -356,15 +415,164 @@ namespace RastreioPedidosDesktop
 
             }
         }
-
-        private void date()
+        String numeroPedido;
+        DateTime? dataHoraGeracao;
+        DateTime? dataHoraFinProd;
+        DateTime? dataHoraIniProd;
+        DateTime dataPrevistaEntrega;
+        DateTime? dataHoraSeparacao;
+        DateTime? dataHoraTransito;
+        String dataHoraEntregaUsuario;
+        String dataHoraFinProdUsuario;
+        String dataHoraGeracaoUsuario;
+        String dataHoraIniProdUsuario;
+        String dataHoraSeparaUsuario;
+        String dataHoraTransitoUsuario;
+        String usuario;
+        private void btnAlterar_Click(object sender, EventArgs e)
         {
-            dtpDataEntrega.Value = Convert.ToDateTime("01/01/1991");
+            Modelo.PedidoController pedidoController = new Modelo.PedidoController();
+            pedidoController.verificarSeTemPedido(txtPedido.Text);
+            if(pedidoController.have)
+            {
+                updatePedidoController updateController = new updatePedidoController();
+
+                if (listViewApontamento.Items[0].SubItems[1].Text == "00/00/0000 00:00:00")
+                {
+                    dataHoraGeracao = DateTime.MinValue;
+
+                    
+                }
+                else
+                {
+                    DateTime value = (DateTime)Convert.ToDateTime(listViewApontamento.Items[0].SubItems[1].Text);
+
+                    dataHoraGeracao = value;
+                }
+                if (listViewApontamento.Items[2].SubItems[1].Text == "00/00/0000 00:00:00")
+                {
+                    dataHoraFinProd = DateTime.MinValue;
+                }
+                else
+                {
+                    DateTime value = (DateTime)Convert.ToDateTime(listViewApontamento.Items[2].SubItems[1].Text);
+
+                    dataHoraFinProd = value;
+
+                }
+                if (listViewApontamento.Items[3].SubItems[1].Text == "00/00/0000 00:00:00")
+                {
+                    MessageBox.Show(DateTime.MinValue.ToString());
+                    dataHoraSeparacao = DateTime.MinValue;
+                }
+                else
+                {
+                    DateTime value = (DateTime)Convert.ToDateTime(listViewApontamento.Items[3].SubItems[1].Text);
+
+                    dataHoraSeparacao = value;
+                }
+
+                if (listViewApontamento.Items[4].SubItems[1].Text == "00/00/0000 00:00:00")
+                {
+                    dataHoraTransito = DateTime.MinValue;
+                }
+                else
+                {
+                    DateTime value = (DateTime)Convert.ToDateTime(listViewApontamento.Items[4].SubItems[1].Text);
+
+                    dataHoraTransito = value;
+
+                }
+
+                if (listViewApontamento.Items[1].SubItems[1].Text == "00/00/0000 00:00:00")
+                {
+                    dataHoraIniProd = DateTime.MinValue;
+                }
+                else
+                {
+                    DateTime value = Convert.ToDateTime(listViewApontamento.Items[1].SubItems[1].Text);
+
+                    dataHoraIniProd = value;
+
+                }
+
+                if (listViewApontamento.Items[5].SubItems[2].Text != string.Empty)
+                {
+                    dataHoraEntregaUsuario = listViewApontamento.Items[5].SubItems[2].Text;
+                }
+                else
+                {
+                    dataHoraEntregaUsuario = string.Empty;
+                }
+
+                if (listViewApontamento.Items[2].SubItems[2].Text != string.Empty)
+                {
+                    dataHoraFinProdUsuario = listViewApontamento.Items[2].SubItems[2].Text;
+                }
+                else
+                {
+                    dataHoraFinProdUsuario = string.Empty;
+                }
+                if (listViewApontamento.Items[0].SubItems[2].Text != string.Empty)
+                {
+                    dataHoraGeracaoUsuario = listViewApontamento.Items[0].SubItems[2].Text;
+                }
+                else
+                {
+                    dataHoraGeracaoUsuario = string.Empty;
+                }
+
+                if (listViewApontamento.Items[1].SubItems[2].Text != string.Empty)
+                {
+                    dataHoraIniProdUsuario = listViewApontamento.Items[1].SubItems[2].Text;
+                }
+                else
+                {
+                    dataHoraIniProdUsuario = string.Empty;
+                }
+                if (listViewApontamento.Items[3].SubItems[2].Text != string.Empty)
+                {
+                    dataHoraSeparaUsuario = listViewApontamento.Items[3].SubItems[2].Text;
+                    
+                }
+                else
+                {
+                    dataHoraSeparaUsuario = string.Empty;
+                }
+                if (listViewApontamento.Items[4].SubItems[2].Text != string.Empty)
+                {
+                    dataHoraTransitoUsuario = listViewApontamento.Items[4].SubItems[2].Text;
+                }
+                else
+                {
+                    dataHoraTransitoUsuario = string.Empty;
+                }
+
+                MessageBox.Show(listViewApontamento.Items[3].SubItems[2].Text);
+                DateTime dataEntrega = Convert.ToDateTime(dtpDataEntrega.Value);
+
+                updateController.UpdatePedidoController(txtPedido.Text, cboStatus.Text, dataEntrega, dataHoraFinProd, dataHoraIniProd, dataPrevistaEntrega, dataHoraSeparacao, dataHoraTransito, dataHoraEntregaUsuario, dataHoraFinProdUsuario, dataHoraGeracaoUsuario, dataHoraGeracao, dataHoraIniProdUsuario, dataHoraSeparaUsuario, dataHoraTransitoUsuario);
+
+
+                MessageBox.Show(dataEntrega.ToString());
+
+                loadListView();
+
+            }
+            else
+            {
+                pedidoController.adicionarPedido(txtPedido.Text, DateTime.Now, lblUsuario.Text);
+
+                MessageBox.Show("Pedido adicionado com sucesso");
+
+                loadListView();
+
+            }
+
         }
 
-        private void btnApontar_Click(object sender, EventArgs e)
+        private void btnApontar_Click_1(object sender, EventArgs e)
         {
- 
 
             String dateTime = Convert.ToDateTime(DateTime.Now).ToString("dd/MM/yyyy HH:mm:ss");
 
@@ -372,14 +580,6 @@ namespace RastreioPedidosDesktop
             listViewApontamento.SelectedItems[0].SubItems[1].Text = dateTime.ToString();
             listViewApontamento.SelectedItems[0].SubItems[2].Text = lblUsuario.ToString();
 
-
         }
-
-        private void btnAlterar_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
 }
