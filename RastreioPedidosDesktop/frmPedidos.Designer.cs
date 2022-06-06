@@ -28,27 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem(new string[] {
             "Data/Hora Geração",
             "00/00/0000 00:00:00",
             ""}, -1, System.Drawing.Color.Empty, System.Drawing.SystemColors.InactiveBorder, null);
-            System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem(new string[] {
             "Data/Hora Ini. Prod.",
             "00/00/0000 00:00:00",
             ""}, -1);
-            System.Windows.Forms.ListViewItem listViewItem27 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem(new string[] {
             "Data/Hora Fin. Prod.",
             "00/00/0000 00:00:00",
             ""}, -1);
-            System.Windows.Forms.ListViewItem listViewItem28 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem(new string[] {
             "Data/Hora Separação",
             "00/00/0000 00:00:00",
             ""}, -1);
-            System.Windows.Forms.ListViewItem listViewItem29 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem(new string[] {
             "Data/Hora Transito",
             "00/00/0000 00:00:00",
             ""}, -1);
-            System.Windows.Forms.ListViewItem listViewItem30 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem(new string[] {
             "Data/Hora Entrega",
             "00/00/0000 00:00:00",
             ""}, -1);
@@ -81,6 +81,7 @@
             this.dtpDataEntrega = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
             this.btnApontar = new System.Windows.Forms.Button();
+            this.txtMskPedido = new System.Windows.Forms.MaskedTextBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -161,6 +162,7 @@
             this.btnLimpar.TabIndex = 9;
             this.btnLimpar.Text = "Limpar";
             this.btnLimpar.UseVisualStyleBackColor = true;
+            this.btnLimpar.Click += new System.EventHandler(this.btnLimpar_Click);
             // 
             // btnCancelar
             // 
@@ -181,12 +183,12 @@
             this.listViewApontamento.FullRowSelect = true;
             this.listViewApontamento.HideSelection = false;
             this.listViewApontamento.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem25,
-            listViewItem26,
-            listViewItem27,
-            listViewItem28,
-            listViewItem29,
-            listViewItem30});
+            listViewItem13,
+            listViewItem14,
+            listViewItem15,
+            listViewItem16,
+            listViewItem17,
+            listViewItem18});
             this.listViewApontamento.Location = new System.Drawing.Point(25, 368);
             this.listViewApontamento.Name = "listViewApontamento";
             this.listViewApontamento.Size = new System.Drawing.Size(1021, 178);
@@ -241,6 +243,7 @@
             this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(12, 27);
+            this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(1115, 80);
             this.listView1.TabIndex = 0;
@@ -281,9 +284,14 @@
             // txtPedido
             // 
             this.txtPedido.Location = new System.Drawing.Point(74, 120);
+            this.txtPedido.MaxLength = 9;
             this.txtPedido.Name = "txtPedido";
             this.txtPedido.Size = new System.Drawing.Size(100, 20);
             this.txtPedido.TabIndex = 15;
+            this.txtPedido.Text = "0000-0000";
+            this.txtPedido.TextChanged += new System.EventHandler(this.txtPedido_TextChanged);
+            this.txtPedido.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPedido_KeyPress);
+            this.txtPedido.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPedido_KeyUp);
             // 
             // cboStatus
             // 
@@ -338,11 +346,25 @@
             this.btnApontar.UseVisualStyleBackColor = true;
             this.btnApontar.Click += new System.EventHandler(this.btnApontar_Click_1);
             // 
+            // txtMskPedido
+            // 
+            this.txtMskPedido.Location = new System.Drawing.Point(74, 170);
+            this.txtMskPedido.Mask = "0000-0000";
+            this.txtMskPedido.Name = "txtMskPedido";
+            this.txtMskPedido.Size = new System.Drawing.Size(100, 20);
+            this.txtMskPedido.TabIndex = 20;
+            this.txtMskPedido.Text = "00000000";
+            this.txtMskPedido.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePrompt;
+            this.txtMskPedido.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
+            this.txtMskPedido.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMskPedido_KeyPress);
+            this.txtMskPedido.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMskPedido_KeyUp);
+            // 
             // frmPedidos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1144, 645);
+            this.Controls.Add(this.txtMskPedido);
             this.Controls.Add(this.btnApontar);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dtpDataEntrega);
@@ -400,5 +422,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnApontar;
         private System.Windows.Forms.ColumnHeader clUsuarioGeracao;
+        private System.Windows.Forms.MaskedTextBox txtMskPedido;
     }
 }
