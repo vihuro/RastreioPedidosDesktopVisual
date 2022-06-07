@@ -81,7 +81,6 @@
             this.dtpDataEntrega = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
             this.btnApontar = new System.Windows.Forms.Button();
-            this.txtMskPedido = new System.Windows.Forms.MaskedTextBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -111,7 +110,6 @@
             this.alteraSenhaToolStripMenuItem.Name = "alteraSenhaToolStripMenuItem";
             this.alteraSenhaToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.alteraSenhaToolStripMenuItem.Text = "Alterar Senha";
-            this.alteraSenhaToolStripMenuItem.Click += new System.EventHandler(this.alteraSenhaToolStripMenuItem_Click);
             // 
             // buscarPedidosToolStripMenuItem
             // 
@@ -249,7 +247,6 @@
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             // 
             // clNumeroPedido
@@ -319,13 +316,14 @@
             // dtpDataEntrega
             // 
             this.dtpDataEntrega.CustomFormat = "00/00/0000";
-            this.dtpDataEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpDataEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpDataEntrega.Location = new System.Drawing.Point(948, 121);
             this.dtpDataEntrega.MaxDate = new System.DateTime(2030, 12, 31, 0, 0, 0, 0);
             this.dtpDataEntrega.Name = "dtpDataEntrega";
             this.dtpDataEntrega.Size = new System.Drawing.Size(98, 20);
             this.dtpDataEntrega.TabIndex = 17;
-            this.dtpDataEntrega.Value = new System.DateTime(2022, 6, 3, 0, 0, 0, 0);
+            this.dtpDataEntrega.Value = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
+            this.dtpDataEntrega.ValueChanged += new System.EventHandler(this.dtpDataEntrega_ValueChanged);
             // 
             // label3
             // 
@@ -346,25 +344,11 @@
             this.btnApontar.UseVisualStyleBackColor = true;
             this.btnApontar.Click += new System.EventHandler(this.btnApontar_Click_1);
             // 
-            // txtMskPedido
-            // 
-            this.txtMskPedido.Location = new System.Drawing.Point(74, 170);
-            this.txtMskPedido.Mask = "0000-0000";
-            this.txtMskPedido.Name = "txtMskPedido";
-            this.txtMskPedido.Size = new System.Drawing.Size(100, 20);
-            this.txtMskPedido.TabIndex = 20;
-            this.txtMskPedido.Text = "00000000";
-            this.txtMskPedido.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePrompt;
-            this.txtMskPedido.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
-            this.txtMskPedido.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMskPedido_KeyPress);
-            this.txtMskPedido.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMskPedido_KeyUp);
-            // 
             // frmPedidos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1144, 645);
-            this.Controls.Add(this.txtMskPedido);
             this.Controls.Add(this.btnApontar);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dtpDataEntrega);
@@ -382,7 +366,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmPedidos";
             this.Text = "Pedidos";
-            this.Load += new System.EventHandler(this.frmPedidos_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -422,6 +405,5 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnApontar;
         private System.Windows.Forms.ColumnHeader clUsuarioGeracao;
-        private System.Windows.Forms.MaskedTextBox txtMskPedido;
     }
 }

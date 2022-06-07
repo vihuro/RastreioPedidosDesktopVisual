@@ -30,7 +30,7 @@ namespace RastreioPedidosDesktop
             postgreSql.Connection = con.conectar();
 
             lerDados = postgreSql.ExecuteReader();
-
+            MessageBox.Show(dtpDataEntrega.Value.ToString());
 
             try
             {
@@ -80,21 +80,6 @@ namespace RastreioPedidosDesktop
             return lerDados;
         }
 
-        private void obterDados(object sender, EventArgs e)
-        {
-
-        }
-
-
-        public void frmPedidos_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        public void alteraSenhaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         public void ajudaToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -106,22 +91,6 @@ namespace RastreioPedidosDesktop
         {
             frmSobre sobre = new frmSobre();
             sobre.Show();
-        }
-
-        private void obter()
-        {
-
-
-        }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-
-        }
-
-        private void dtpDataEntrega_ValueChanged(object sender, EventArgs e)
-        {
         }
 
         public void carregarItems()
@@ -154,18 +123,20 @@ namespace RastreioPedidosDesktop
                 }
                 else
                 {
-                    if (lerDados["data_prevista_entrega"] != DBNull.Value)
+                    if (lerDados["data_prevista_entrega"] == DBNull.Value || Convert.ToDateTime(lerDados["data_prevista_entrega"]) == DateTime.MinValue)
                     {
-
-                        String dataEntrega = Convert.ToDateTime(lerDados["data_prevista_entrega"]).ToString("dd/MM/yyyy");
-                        dtpDataEntrega.CustomFormat = dataEntrega;
+   
+                        dtpDataEntrega.CustomFormat = "00/00/0000";
 
 
                     }
                     else
                     {
+                        MessageBox.Show(lerDados["data_prevista_entrega"].ToString());
 
-                        dtpDataEntrega.CustomFormat = "00/00/0000";
+                        String dataEntrega = Convert.ToDateTime(lerDados["data_prevista_entrega"]).ToString("dd/MM/yyyy");
+                        dtpDataEntrega.CustomFormat = dataEntrega;
+
 
 
                     }
@@ -367,7 +338,21 @@ namespace RastreioPedidosDesktop
                     {
                         listViewApontamento.Items[4].SubItems[2].Text = string.Empty;
                     }
-                    if (lerDados["data_entrega"] != DBNull.Value)
+                    if (lerDados["data_entrega"] == DBNull.Value || Convert.ToDateTime(lerDados["data_entrega"].ToString()) == DateTime.MinValue)
+                    {
+
+                        ListViewItem listItem = new ListViewItem();
+
+                        String dataValue = "00/00/0000 00:00:00";
+
+                        listItem.SubItems.Add("00/00/0000 00:00:00");
+
+
+                        listViewApontamento.Items[5].SubItems[1].Text = dataValue.ToString();
+
+
+                    }
+                    else
                     {
 
                         String dataEntrega = Convert.ToDateTime(lerDados["data_entrega"]).ToString("dd/MM/yyyy  HH:mm:ss");
@@ -383,18 +368,7 @@ namespace RastreioPedidosDesktop
                         listViewApontamento.Items[5].SubItems[1].Text = dataEntrega.ToString();
 
                     }
-                    else
-                    {
-                        ListViewItem listItem = new ListViewItem();
 
-                        String dataValue = "00/00/0000 00:00:00";
-
-                        listItem.SubItems.Add("00/00/0000 00:00:00");
-
-
-                        listViewApontamento.Items[5].SubItems[1].Text = dataValue.ToString();
-
-                    }
                     if (lerDados["data_entrega_usuario"] != DBNull.Value)
                     {
                         listViewApontamento.Items[5].SubItems[2].Text = lerDados["data_entrega_usuario"].ToString();
@@ -436,6 +410,7 @@ namespace RastreioPedidosDesktop
         DateTime dataPrevistaEntrega;
         DateTime? dataHoraSeparacao;
         DateTime? dataHoraTransito;
+        DateTime? dataHoraEntrega;
         String dataHoraEntregaUsuario;
         String dataHoraFinProdUsuario;
         String dataHoraGeracaoUsuario;
@@ -494,6 +469,17 @@ namespace RastreioPedidosDesktop
                     DateTime value = (DateTime)Convert.ToDateTime(listViewApontamento.Items[4].SubItems[1].Text);
 
                     dataHoraTransito = value;
+
+                }
+                if (listViewApontamento.Items[5].SubItems[1].Text == "00/00/0000 00:00:00")
+                {
+                    dataHoraEntrega = DateTime.MinValue;
+                }
+                else
+                {
+                    DateTime value = (DateTime)Convert.ToDateTime(listViewApontamento.Items[5].SubItems[1].Text);
+
+                    dataHoraEntrega = value;
 
                 }
 
@@ -563,10 +549,11 @@ namespace RastreioPedidosDesktop
 
                 DateTime dataEntrega = Convert.ToDateTime(dtpDataEntrega.Value);
 
+                MessageBox.Show(dataEntrega.ToString());
 
-
-                updateController.UpdatePedidoController(txtPedido.Text, cboStatus.Text, dataEntrega, dataHoraFinProd, dataHoraIniProd, dataPrevistaEntrega, dataHoraSeparacao, dataHoraTransito, dataHoraEntregaUsuario, dataHoraFinProdUsuario, dataHoraGeracaoUsuario, dataHoraGeracao, dataHoraIniProdUsuario, dataHoraSeparaUsuario, dataHoraTransitoUsuario);
-       
+                updateController.UpdatePedidoController(txtPedido.Text, cboStatus.Text,dataHoraEntrega, dataHoraFinProd, dataHoraIniProd, dataEntrega, dataHoraSeparacao, dataHoraTransito, dataHoraEntregaUsuario, dataHoraFinProdUsuario, dataHoraGeracaoUsuario, dataHoraGeracao, dataHoraIniProdUsuario, dataHoraSeparaUsuario, dataHoraTransitoUsuario);
+                //updateController.UpdatePedidoController(txtPedido.Text, cboStatus.Text, dataHoraEntrega, dataHoraFinProd, dataHoraIniProd, dataEntrega, dataHoraSeparacao, dataHoraTransito, dataHoraEntregaUsuario, dataHoraFinProdUsuario, dataHoraGeracaoUsuario, dataHoraGeracao, dataHoraIniProdUsuario, dataHoraSeparaUsuario, dataHoraTransitoUsuario);
+                listView1.Items.Clear();
                 loadListView();
                 limpar();
 
@@ -577,6 +564,7 @@ namespace RastreioPedidosDesktop
 
                 MessageBox.Show("Pedido adicionado com sucesso");
                 limpar();
+                listView1.Items.Clear();
                 loadListView();
 
             }
@@ -654,39 +642,8 @@ namespace RastreioPedidosDesktop
             }
         }
 
-        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        private void dtpDataEntrega_ValueChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void txtMskPedido_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-        }
-
-        private void txtMskPedido_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
-            {
-
-                carregarItems();
-
-                listView1.SelectedItems.Clear();
-                foreach (ListViewItem item in listView1.Items)
-                {
-
-                    if (txtMskPedido.Text == item.SubItems[0].Text)
-                    {
-                        listView1.Focus();
-                        item.Selected = true;
-                        break;
-
-
-                    }
-                }
-
-
-            }
 
         }
     }
